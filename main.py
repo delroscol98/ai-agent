@@ -6,18 +6,19 @@ from google import genai
 
 
 def main():
+    # Loads env key to genai
+    load_dotenv()
+    api_key = os.environ.get("GEMINI_API_KEY")
+    client = genai.Client(api_key=api_key)
+
     args = sys.argv[1:]
 
+    # Check for user_prompt
     if not args:
         print("Your personal AI Assistant")
         print('\nUsage: python main.py "your prompt here"')
         print('Example: python main.py "How do I build a calculator app?"')
         sys.exit(1)
-
-    load_dotenv()
-
-    api_key = os.environ.get("GEMINI_API_KEY")
-    client = genai.Client(api_key=api_key)
 
     user_prompt = args[0]
 
