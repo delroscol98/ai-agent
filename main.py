@@ -3,6 +3,25 @@ import sys
 
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
+
+
+def generate_content(client, messages):
+    # response from the gemini-2.0-flash-001 model
+    text_response = client.models.generate_content(
+        model="gemini-2.0-flash-001",
+        contents=messages
+    )
+
+    # Number of tokens in the prompt
+    prompt_tokens = text_response.usage_metadata.prompt_token_count
+
+    # Number of tokens in the response
+    response_tokens = text_response.usage_metadata.candidates_token_count
+
+    print(text_response.text)
+    print(prompt_tokens)
+    print(response_tokens)
 
 
 def main():
@@ -20,23 +39,16 @@ def main():
         print('Example: python main.py "How do I build a calculator app?"')
         sys.exit(1)
 
+    # retrieves user prompt
     user_prompt = args[0]
 
-    # response from the gemini-2.0-flash-001 model
-    text_response = client.models.generate_content(
-        model="gemini-2.0-flash-001",
-        contents=user_prompt
-    )
+    # stores a list of messages for Gemini to see the
+    # whole conversation and answer with the whole context
+    messages = [
+        types.Content(role="user", parts=[types.Part(text=user_prompt)]),
+    ]
 
-    # Number of tokens in the prompt
-    prompt_tokens = text_response.usage_metadata.prompt_token_count
-
-    # Number of tokens in the response
-    response_tokens = text_response.usage_metadata.candidates_token_count
-
-    print(text_response.text)
-    print(prompt_tokens)
-    print(response_tokens)
+    generate_content(client, messages)
 
 
 if __name__ == "__main__":
