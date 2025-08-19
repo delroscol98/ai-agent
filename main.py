@@ -5,26 +5,35 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+from config.prompts import system_prompt
+
+from functions.get_files_info import available_functions
 
 def generate_content(client, messages, verbose):
     # response from the gemini-2.0-flash-001 model
-    text_response = client.models.generate_content(
+    response = client.models.generate_content(
         model="gemini-2.0-flash-001",
-        contents=messages
+        contents=messages,
+        config=types.GenerateContentConfig(tools=[available_functions], system_instruction=system_prompt),
     )
 
     # Number of tokens in the prompt
-    prompt_tokens = text_response.usage_metadata.prompt_token_count
+    prompt_tokens = response.usage_metadata.prompt_token_count
 
     # Number of tokens in the response
-    response_tokens = text_response.usage_metadata.candidates_token_count
+    response_tokens = response.usage_metadata.candidates_token_count
 
     if verbose:
         print(f"Prompt tokens: {prompt_tokens}")
         print(f"Response tokens: {response_tokens}")
 
     print("---------------AI Response---------------")
-    print(text_response.text)
+    # Checks for any function calls and calls the functions passed to the schema through the Tools in get_files_info
+    if response.function_calls:
+        for call in response.function_calls:
+            print(f"Calling function: {call.name}({call.args})")
+    else:
+        print(response.text)
 
 
 def main():
