@@ -2,12 +2,13 @@ import os
 import sys
 
 from dotenv import load_dotenv
+
 from google import genai
 from google.genai import types
 
 from config.prompts import system_prompt
 
-from functions.get_files_info import available_functions
+from functions.call_functions import available_functions
 
 def generate_content(client, messages, verbose):
     # response from the gemini-2.0-flash-001 model
