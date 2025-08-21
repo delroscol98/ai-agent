@@ -16,11 +16,6 @@ schema_get_files_info = types.FunctionDeclaration(
     ),
 )
 
-available_functions = types.Tool(
-    function_declarations=[
-        schema_get_files_info,
-    ]
-)
 
 def print_directory_contents(path):
     directory_contents = os.listdir(path)
