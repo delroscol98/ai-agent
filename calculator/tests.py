@@ -26,6 +26,10 @@ class TestCalculate(unittest.TestCase):
         result = self.calculator.evaluate("3 * 4 + 5")
         self.assertEqual(result, 17)
 
+    def test_complex_expression(self):
+        result = self.calculator.evaluate("2 * 3 - 8 / 2 + 5")
+        self.assertEqual(result, 7)
+
     def test_empty_expression(self):
         result = self.calculator.evaluate("")
         self.assertIsNone(result)
