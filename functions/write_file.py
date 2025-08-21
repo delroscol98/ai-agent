@@ -36,7 +36,7 @@ def write_file(working_directory, file_path, content):
     # if no, make the path recursively
     if not os.path.exists(abs_file_path):
         try:
-            os.makedirs(os.path.dirname(abs_file_path))
+            os.makedirs(os.path.dirname(abs_file_path), exist_ok=True)
         except Exception as e:
             return f"Error: Creating directory: {e}"
 
