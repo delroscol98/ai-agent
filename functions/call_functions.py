@@ -23,8 +23,8 @@ def call_function(function_call_part, verbose=False):
 
     if not verbose:
         print(f" - Calling function: {function_name}")
-
-    print(f"Calling function: {function_name}({function_args})")
+    else:
+        print(f"Calling function: {function_name}({function_args})")
 
     functions_map = {
         "get_file_content": get_file_content,
