@@ -19,6 +19,10 @@ def generate_content(client, messages, verbose):
         config=types.GenerateContentConfig(tools=[available_functions], system_instruction=system_prompt),
     )
 
+    for candidate in response.candidates:
+        content = candidate.content
+        messages.append(content)
+
     # Number of tokens in the prompt
     prompt_tokens = response.usage_metadata.prompt_token_count
 
@@ -35,13 +39,22 @@ def generate_content(client, messages, verbose):
         for call in response.function_calls:
             function_call_result = call_function(call, verbose)
             function_response = function_call_result.parts[0].function_response.response
+            function_name = function_call_result.parts[0].function_response.name
 
             if not function_response:
                 raise Exception("Error: no function response")
 
-            print(f'-> {function_response}')
-    else:
-        print(response.text)
+            function_message = types.Content(
+                role="user",
+                parts=[types.Part(function_response={
+                    "name": function_name,
+                    "response": function_response
+                })],
+            )
+
+            messages.append(function_message)
+
+    return response
 
 
 def main():
@@ -76,8 +89,17 @@ def main():
         types.Content(role="user", parts=[types.Part(text=user_prompt)]),
     ]
 
-    # Generates content from Gemini AI
-    generate_content(client, messages, verbose)
+    for i in range(0, 20):
+        try:
+            # Generates content from Gemini AI
+            response = generate_content(client, messages, verbose)
+
+            if response.text:
+                print(response.text)
+                break
+
+        except Exception as e:
+            return f"Error: {e}"
 
 
 if __name__ == "__main__":
