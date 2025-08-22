@@ -8,7 +8,8 @@ from google.genai import types
 
 from config.prompts import system_prompt
 
-from functions.call_functions import available_functions
+from functions.call_functions import available_functions, call_function
+
 
 def generate_content(client, messages, verbose):
     # response from the gemini-2.0-flash-001 model
@@ -29,10 +30,16 @@ def generate_content(client, messages, verbose):
         print(f"Response tokens: {response_tokens}")
 
     print("---------------AI Response---------------")
-    # Checks for any function calls and calls the functions passed to the schema through the Tools in get_files_info
+    # Based on prompt AI decides which function to call
     if response.function_calls:
         for call in response.function_calls:
-            print(f"Calling function: {call.name}({call.args})")
+            function_call_result = call_function(call, verbose)
+            function_response = function_call_result.parts[0].function_response.response
+
+            if not function_response:
+                raise Exception("Error: no function response")
+
+            print(f'-> {function_response}')
     else:
         print(response.text)
 
