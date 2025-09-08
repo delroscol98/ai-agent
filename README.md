@@ -8,7 +8,7 @@ The technologies used in building this program are the following:
 - AI API: Gemini
 - Text Editor: Neovim
 
-This project was a learning project from (boot.dev)[https://www.boot.dev/courses/build-ai-agent-python] with many challenges that allowed to practice functional programming and debugging.
+This project was a learning project from [boot.dev](https://www.boot.dev/courses/build-ai-agent-python) with many challenges that allowed to practice functional programming and debugging.
 
 The learning goals of this project were to:
 - Provide an introduction to multi-directory Python projects
@@ -41,5 +41,5 @@ Within this project, there were many concepts that were difficult to grasp and w
 5. **Feedback Loop**: A key part of an "Agent" is that it can ontinuously use its tools to iterate on its own results.
 
 ### Helpful Links
-- (Boot.dev)[boot.dev]
-- (Google Gen AI SDK)[https://googleapis.github.io/python-genai/index.html]
+- [Boot.dev](boot.dev)
+- [Google Gen AI SDK](https://googleapis.github.io/python-genai/index.html)
